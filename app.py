@@ -1,25 +1,41 @@
-from tkinter import *
 import customtkinter
 from PIL import Image
 import subprocess
 import os
+import psutil
+from user_data import *
 
-
-def adbRun():
-    subprocess.Popen(['scrcpy.exe'], shell = True,cwd='Runtime')
-
+# INTIALIANZING  
 window = customtkinter.CTk()
 window.title('H-Screen Miror')
-
 customtkinter.set_appearance_mode('light')
-
 window.resizable(0,0)
 
-# window.maxsize & window.minsize
+# Open Config Or Write Config
+load_data()
 
-# trash_icon = customtkinter.CTkImage(light_image=Image.open('./asset/trash.png'),size=(16,16))
-# Btn_Bar1 = customtkinter.CTkButton(master=window,text='Cache',corner_radius=0,fg_color='transparent',text_color='red',image=trash_icon)
-# Btn_Bar1.place(anchor=customtkinter.NW,pos_x=100)
+# Adb Check
+g_adb_running = False
+def adbRun():
+    if not g_adb_running:
+        subprocess.run(['adb.exe','tcpip','5555'], shell = True,cwd='Runtime')
+        print('run adb')
+        CKAdb()
+
+# check ADB is running or not
+def CKAdb():
+    process = 'adb.exe'
+    process_status = [ proc.status() for proc in psutil.process_iter() if proc.name() == process ]
+    if process_status:
+        start_adb.configure(
+            text='ADB running',
+            fg_color='#FFA800',
+            hover_color='#FF9200'
+        )
+        print('Adb running')
+        
+
+# window.maxsize & window.minsize
 
 navigation_frame = customtkinter.CTkFrame(
     master=window,
@@ -41,7 +57,8 @@ start_adb = customtkinter.CTkButton(
     corner_radius=5,
     hover_color='#52BE80',
     command=adbRun
-).place(x=10,y=8)
+)
+start_adb.place(x=10,y=8)
 
 # Buka folder lokasi
 OPL_image = customtkinter.CTkImage(light_image=Image.open('./asset/folder.png'),size=(20,15))
@@ -180,6 +197,18 @@ record_conf = customtkinter.CTkOptionMenu(
 # print(output)
 
 # test
+
+# Start Checking Adb
+process = 'adb.exe'
+process_status = [ proc.status() for proc in psutil.process_iter() if proc.name() == process ]
+if process_status:
+    g_adb_running = True
+    start_adb.configure(
+            text='ADB running',
+            fg_color='#FFA800',
+            hover_color='#FF9200'
+            )
+
 
 #setingan layar
 lebar = 480
