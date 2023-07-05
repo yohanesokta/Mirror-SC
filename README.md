@@ -1,5 +1,5 @@
-# apa itu  **MIRROR SC ?**
-### **Mirror SC** merupakan sebuah aplikasi untuk melakukan mirroring layar di smartphone **ANDROID** ke komputer dengan menggunakan USB degan basic dari ( **scrcpy** )
+## apa itu  **MIRROR SC ?**
+#### **Mirror SC** merupakan sebuah aplikasi untuk melakukan mirroring layar di smartphone **ANDROID** ke komputer dengan menggunakan USB degan basic dari ( **scrcpy** )
 #
 ## Cara Build
 #
