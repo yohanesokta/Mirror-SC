@@ -14,9 +14,6 @@
 
 #
 
-* ### Package yang dibutuhkan untuk build
+* ### Install package yang dibutuhkan
 #
-    - ustomtkinter
-    - psutil
-    - pickle
-    - dump
+    pip install customtkinter psutil dump configpraser
