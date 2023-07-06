@@ -5,22 +5,36 @@ import os
 import psutil
 from user_data import *
 
+    # 0.scrcpy.exe - default on runtime
+    # 1.fulscreen
+    # 2.audo forward
+    # 3.keep on 
+    # 4.resulusi
+    # 5.frame rate
+    # 6.record
+
 # INTIALIANZING  
 window = customtkinter.CTk()
 window.title('H-Screen Miror')
 customtkinter.set_appearance_mode('light')
 window.resizable(0,0)
-
 # Open Config Or Write Config
-load_data()
+config = save_data()
+
+
+def cmdUpdate(add):
+    cmd.configure(state='normal')
+    cmd.insert("0.0",add)
+    cmd.configure(state='disable')
 
 # Adb Check
 g_adb_running = False
 def adbRun():
     if not g_adb_running:
-        subprocess.run(['adb.exe','tcpip','5555'], shell = True,cwd='Runtime')
-        print('run adb')
+        run = subprocess.run(['adb.exe','tcpip','5555'], shell = True,cwd='Runtime')
+        cmdUpdate('program started adb.exe\n')
         CKAdb()
+
 
 # check ADB is running or not
 def CKAdb():
@@ -119,10 +133,12 @@ res_title = customtkinter.CTkLabel(right_frame2,
 res_conf = customtkinter.CTkOptionMenu(
     master=right_frame2,
     values=[
-        '1280x720',
-        '1920x1080'
+        '480p',
+        '720p',
+        '1080p'
     ]
-).place(x=330,y=70)
+)
+res_conf.place(x=330,y=70)
 
 #framerate setting
 frame_title = customtkinter.CTkLabel(
@@ -133,12 +149,13 @@ frame_title = customtkinter.CTkLabel(
 frame_conf = customtkinter.CTkOptionMenu(
     master=right_frame2,
     values=[
-        '30 fps',
-        '50 fps',
-        '60 fps',
-        'max framerate'
+        '30 Fps',
+        '50 Fps',
+        '60 Fps',
+        'Unlock'
     ]
-).place(x=330,y=120)
+)
+frame_conf.place(x=330,y=120)
 
 #fullscreen
 btn_full = customtkinter.CTkCheckBox(
@@ -150,7 +167,8 @@ btn_full = customtkinter.CTkCheckBox(
     checkbox_width=14,
     border_width=1.5,
     corner_radius=50
-).place(x=250,y=220)
+)
+btn_full.place(x=250,y=220)
 
 #audio
 btn_audio = customtkinter.CTkCheckBox(
@@ -162,7 +180,8 @@ btn_audio = customtkinter.CTkCheckBox(
     checkbox_width=14,
     border_width=1.5,
     corner_radius=50
-).place(x=360,y=220)
+)
+btn_audio.place(x=360,y=220)
 
 # stay awake
 
@@ -175,7 +194,8 @@ btn_on = customtkinter.CTkCheckBox(
     checkbox_width=14,
     border_width=1.5,
     corner_radius=50
-).place(x=250,y=175)
+)
+btn_on.place(x=250,y=175)
 
 # record
 record_conf = customtkinter.CTkOptionMenu(
@@ -185,8 +205,21 @@ record_conf = customtkinter.CTkOptionMenu(
         'Record (.mp4)',
         'Record (.mkv)'
     ]
-).place(x=330,y=170)
+)
+record_conf.place(x=330,y=170)
 
+cmd = customtkinter.CTkTextbox(
+    master=window,
+    width=460,
+    height= 20,
+    fg_color='transparent',
+    scrollbar_button_color='#EBEBEB',
+    scrollbar_button_hover_color='#EBEBEB'
+)
+cmd.place(x=10,y=470-20)
+cmd.insert("0.0",'initializing successfull')
+cmd.configure(state='disable')
+cmd.unbind()
 # test
 # s = subprocess.check_output("scrcpy.exe", shell = True)
 # print(s.decode("utf-8"))
@@ -202,6 +235,7 @@ record_conf = customtkinter.CTkOptionMenu(
 process = 'adb.exe'
 process_status = [ proc.status() for proc in psutil.process_iter() if proc.name() == process ]
 if process_status:
+    cmdUpdate('adb.exe is already running\n')
     g_adb_running = True
     start_adb.configure(
             text='ADB running',
@@ -209,6 +243,13 @@ if process_status:
             hover_color='#FF9200'
             )
 
+# Sync Aplikasi dengan save data config
+syncConfig(btn_full,'fullscreen','box')
+syncConfig(btn_audio,'audio','box')
+syncConfig(btn_on,'keepOn','box')
+syncConfig(res_conf,'res','Option')
+syncConfig(frame_conf,'MxFps','Option')
+syncConfig(record_conf,'record','Option')
 
 #setingan layar
 lebar = 480
