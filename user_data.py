@@ -1,7 +1,7 @@
 import configparser
 CFpraser = configparser.ConfigParser()
 
-def save_data():
+def load_data():
     CFpraser.read('user_config.cfg')
     return CFpraser
 
@@ -12,10 +12,9 @@ def syncConfig(Var,Config,input):
             Var.select()
         else:
             Var.deselect()
-
-    # resolusi input
-
     if input == 'Option':
         Var.set(CFpraser.get('User',Config))
 
-# def load_data():
+
+def save_data(cfg):
+    with open('user_config.cfg', 'w') as configfile:cfg.write(configfile)

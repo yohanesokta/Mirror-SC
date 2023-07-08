@@ -4,6 +4,8 @@ import subprocess
 import os
 import psutil
 from user_data import *
+from runner import mainRun
+
 
     # 0.scrcpy.exe - default on runtime
     # 1.fulscreen
@@ -15,11 +17,14 @@ from user_data import *
 
 # INTIALIANZING  
 window = customtkinter.CTk()
-window.title('H-Screen Miror')
+window.title(' Screen Mirroring - Mirror SC')
 customtkinter.set_appearance_mode('light')
 window.resizable(0,0)
+
+
 # Open Config Or Write Config
-config = save_data()
+config = load_data()
+
 
 
 def cmdUpdate(add):
@@ -47,10 +52,40 @@ def CKAdb():
             hover_color='#FF9200'
         )
         print('Adb running')
-        
+# command button
+def full_com():
+    global config
+    if btn_full.get():
+        config.set('User','fullscreen','True')        
+    else:
+        config.set('User','fullscreen','False')
 
-# window.maxsize & window.minsize
+def audio_com():
+    global config
+    if btn_audio.get():
+        config.set('User','audio','True')
+    else:
+        config.set('User','audio','False')
 
+def keepOn_com():
+    global config
+    if btn_on.get():
+        config.set('User','keepOn','True')
+    else:
+        config.set('User','keepOn','False')
+
+def mirror_start():
+    global config
+    save_data(config)
+    cmdUpdate('Starting Screen Mirror\n')
+    mainRun(config)
+
+def option(btn,name):
+    config.set('User',name,btn.get())
+    print('update')
+    cmdUpdate("setting updated { "+ str(btn.get()) + " }\n")
+
+# Window Wiget  ------------------------
 navigation_frame = customtkinter.CTkFrame(
     master=window,
     width=480,
@@ -92,18 +127,20 @@ frame2 = customtkinter.CTkFrame(
     width=480,
     height=200,
     corner_radius=0,
-    fg_color='#C7C7C7',
+    fg_color='#EBEBEB',
     
 ).place(x=0,y=60)
-
+                                              
 # Screen Mirror
 mirror_icon = customtkinter.CTkImage(light_image=Image.open('./asset/mirror.png'),size=(25,22))
 btn_mirror = customtkinter.CTkButton(
-    master=frame2,
+    master=frame2,                                                                                                                                              
     width=220,
     height=80,
+    bg_color='#EBEBEB',
     text='Screen Miror',
     image=mirror_icon,
+    command=mirror_start
 ).place(x=10,y=72.5)
 
 # Device Mirror
@@ -116,19 +153,21 @@ btn_otg = customtkinter.CTkButton(
     image=otg_icon
 ).place(x=10,y=167.5)
 
-color_frame2 = "#DBDBDB"
+color_frame2 = "#A8CDEA"
 right_frame2 = customtkinter.CTkFrame(
     master=frame2,
     width=280,
-    height=200,
-    corner_radius=0,
-    bg_color='#C7C7C7'
+    height=195,
+    corner_radius=10,
+    fg_color=color_frame2,
+    border_color='#484848',
 ).place(x=240,y=60)
 
 #resolusi layar
 res_title = customtkinter.CTkLabel(right_frame2,
     text="Resolution", 
-    fg_color=color_frame2
+    fg_color=color_frame2,
+    bg_color=color_frame2
 ).place(x=250,y=70)
 res_conf = customtkinter.CTkOptionMenu(
     master=right_frame2,
@@ -136,7 +175,9 @@ res_conf = customtkinter.CTkOptionMenu(
         '480p',
         '720p',
         '1080p'
-    ]
+    ],
+    command=lambda event: option(res_conf,'res'),
+    bg_color=color_frame2
 )
 res_conf.place(x=330,y=70)
 
@@ -144,7 +185,8 @@ res_conf.place(x=330,y=70)
 frame_title = customtkinter.CTkLabel(
     master=right_frame2,
     text='Frame rate',
-    fg_color=color_frame2
+    fg_color=color_frame2,
+    bg_color=color_frame2,
 ).place(x=250,y=120)
 frame_conf = customtkinter.CTkOptionMenu(
     master=right_frame2,
@@ -153,7 +195,9 @@ frame_conf = customtkinter.CTkOptionMenu(
         '50 Fps',
         '60 Fps',
         'Unlock'
-    ]
+    ],
+    command=lambda event: option(frame_conf,'mxFps'),
+    bg_color=color_frame2
 )
 frame_conf.place(x=330,y=120)
 
@@ -166,7 +210,8 @@ btn_full = customtkinter.CTkCheckBox(
     checkbox_height=14,
     checkbox_width=14,
     border_width=1.5,
-    corner_radius=50
+    corner_radius=50,
+    command=full_com,
 )
 btn_full.place(x=250,y=220)
 
@@ -179,7 +224,8 @@ btn_audio = customtkinter.CTkCheckBox(
     checkbox_height=14,
     checkbox_width=14,
     border_width=1.5,
-    corner_radius=50
+    corner_radius=50,
+    command=audio_com,
 )
 btn_audio.place(x=360,y=220)
 
@@ -193,7 +239,8 @@ btn_on = customtkinter.CTkCheckBox(
     checkbox_height=14,
     checkbox_width=14,
     border_width=1.5,
-    corner_radius=50
+    corner_radius=50,
+    command=keepOn_com,
 )
 btn_on.place(x=250,y=175)
 
@@ -204,7 +251,9 @@ record_conf = customtkinter.CTkOptionMenu(
         'Not Record',
         'Record (.mp4)',
         'Record (.mkv)'
-    ]
+    ],
+    command=lambda event: option(record_conf,'record'),
+    bg_color=color_frame2
 )
 record_conf.place(x=330,y=170)
 
@@ -212,7 +261,8 @@ cmd = customtkinter.CTkTextbox(
     master=window,
     width=460,
     height= 20,
-    fg_color='transparent',
+    bg_color=color_frame2,
+    fg_color='#EBEBEB',
     scrollbar_button_color='#EBEBEB',
     scrollbar_button_hover_color='#EBEBEB'
 )
@@ -220,6 +270,18 @@ cmd.place(x=10,y=470-20)
 cmd.insert("0.0",'initializing successfull')
 cmd.configure(state='disable')
 cmd.unbind()
+
+image_prev = customtkinter.CTkImage(light_image=Image.open('./asset/l_asset_1.png'),size=(460,180))
+
+image_canvas = customtkinter.CTkButton(
+    master=window,
+    image=image_prev,
+    width=460,
+    fg_color='#EBEBEB',
+    hover_color='#EBEBEB',
+    height=180,
+    )
+image_canvas.place(x=0,y=265)
 # test
 # s = subprocess.check_output("scrcpy.exe", shell = True)
 # print(s.decode("utf-8"))
