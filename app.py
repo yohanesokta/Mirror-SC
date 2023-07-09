@@ -1,19 +1,9 @@
 import customtkinter
 from PIL import Image
 import subprocess
-import os
 import psutil
 from user_data import *
-from runner import mainRun
-
-
-    # 0.scrcpy.exe - default on runtime
-    # 1.fulscreen
-    # 2.audo forward
-    # 3.keep on 
-    # 4.resulusi
-    # 5.frame rate
-    # 6.record
+from runner import mainRun,OtgRunner
 
 # INTIALIANZING  
 window = customtkinter.CTk()
@@ -24,8 +14,6 @@ window.resizable(0,0)
 
 # Open Config Or Write Config
 config = load_data()
-
-
 
 def cmdUpdate(add):
     cmd.configure(state='normal')
@@ -78,14 +66,66 @@ def mirror_start():
     global config
     save_data(config)
     cmdUpdate('Starting Screen Mirror\n')
-    mainRun(config)
+    mainRun(config,window)
 
 def option(btn,name):
     config.set('User',name,btn.get())
     print('update')
     cmdUpdate("setting updated { "+ str(btn.get()) + " }\n")
 
+def otgM():
+    OtgRunner('mouse',window)
+def otgMK():
+    OtgRunner('key',window)
+
+#TOP LEVEL
+
+def otgConnect():
+    top = customtkinter.CTkToplevel()
+    lebar = 295
+    tinggi = 150
+    Width = window.winfo_screenwidth()
+    Height = window.winfo_screenheight()
+    pos_x = int((Width/2) - (lebar/2))
+    pos_y = int((Height/2) - (tinggi/2) - 50)
+    top.geometry(f"{lebar}x{tinggi}+{pos_x}+{pos_y}")
+    top.resizable(0,0)
+    top.title('Select - OTG')
+    top.focus_force()
+    top.lift()
+    top.grab_set()
+
+    mouse = customtkinter.CTkButton(
+        master=top,
+        width=140,
+        height=140,
+        fg_color='#1883D5',
+        hover_color='#0088FF',
+        text='',
+        image=customtkinter.CTkImage(Image.open('./asset/mouse.png'),size=(80,82)),
+        command=otgM
+    )
+    mouse.place(x=5,y=5)
+
+    mouse_keyboard = customtkinter.CTkButton(
+        master=top,
+        width=140,
+        height=140,
+        fg_color='green',
+        hover_color='#60B060',
+        text='',
+        image=customtkinter.CTkImage(Image.open('./asset/key.png'),size=(80,74)),
+        command=otgMK
+    )
+    mouse_keyboard.place(x=150,y=5)
+# --------------------------------------
+# End TOP LEVE:
+# --------------------------------------
+
+
 # Window Wiget  ------------------------
+
+
 navigation_frame = customtkinter.CTkFrame(
     master=window,
     width=480,
@@ -150,7 +190,8 @@ btn_otg = customtkinter.CTkButton(
     width=220,
     height=80,
     text='Device Miror',
-    image=otg_icon
+    image=otg_icon,
+    command=otgConnect
 ).place(x=10,y=167.5)
 
 color_frame2 = "#A8CDEA"
@@ -174,7 +215,8 @@ res_conf = customtkinter.CTkOptionMenu(
     values=[
         '480p',
         '720p',
-        '1080p'
+        '1080p',
+        'Unset'
     ],
     command=lambda event: option(res_conf,'res'),
     bg_color=color_frame2
@@ -272,7 +314,6 @@ cmd.configure(state='disable')
 cmd.unbind()
 
 image_prev = customtkinter.CTkImage(light_image=Image.open('./asset/l_asset_1.png'),size=(460,180))
-
 image_canvas = customtkinter.CTkButton(
     master=window,
     image=image_prev,
@@ -282,16 +323,11 @@ image_canvas = customtkinter.CTkButton(
     height=180,
     )
 image_canvas.place(x=0,y=265)
-# test
-# s = subprocess.check_output("scrcpy.exe", shell = True)
-# print(s.decode("utf-8"))
 
-# p = subprocess.Popen(["scrcpy.exe"],stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-# output, errors = p.communicate()
 
-# print(output)
-
-# test
+# --------------------------------------
+# End Windows Wiget 
+# --------------------------------------
 
 # Start Checking Adb
 process = 'adb.exe'

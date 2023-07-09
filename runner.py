@@ -1,8 +1,11 @@
 import subprocess
+from tkinter import messagebox
 from pathlib import Path
 home = str(Path.home())
 home += '\\videos\\MirrorRec'
-def mainRun(args):
+
+
+def mainRun(args,window):
     global home
     lib = 'User'
     exec = ['scrcpy.exe']
@@ -34,7 +37,22 @@ def mainRun(args):
             exec += ['-r',home + '.mp4']
         case 'Record (.mkv)':
             exec += ['-r',home + '.mkv']
-            
-    print(home)
     print(exec)
-    subprocess.Popen(exec,shell=True,cwd='Runtime')
+    window.withdraw()
+    try:
+        grepOut = subprocess.check_output(exec, shell=True,cwd='Runtime')                       
+    except subprocess.CalledProcessError as grepexc:                                                                                                   
+        messagebox.showerror('Program Gak iso jalan', 'Please check cable or turn on USB Debugging')
+    window.deiconify()
+
+
+# function otg
+
+def OtgRunner(hid,window):
+    exec = ['scrcpy.exe','--otg','-M']
+    if hid == 'key':
+        exec += ['-K']
+    try:
+        prog = subprocess.check_output(exec,shell=True,cwd='Runtime')
+    except subprocess.CalledProcessError as progexc:
+        messagebox.showerror('Program Gak iso jalan', 'Please check cable or turn on USB Debugging')
