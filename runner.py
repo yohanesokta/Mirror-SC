@@ -1,12 +1,16 @@
 import subprocess
 from tkinter import messagebox
 from pathlib import Path
+import time
+import os
 home = str(Path.home())
-home += '\\videos\\MirrorRec'
+os.system('mkdir '+ home + '\\videos\\MirrorRec\\')
+rec_path = home + '\\videos\\MirrorRec\\MirrorRec_' + str(time.time())
 
 
 def mainRun(args,window):
     global home
+    rec_path = home + '\\videos\\MirrorRec\\MirrorRec_' + str(time.time())
     lib = 'User'
     exec = ['scrcpy.exe']
     if args.get(lib,'fullscreen') == 'True':
@@ -34,9 +38,9 @@ def mainRun(args,window):
 
     match args.get(lib,'record'):
         case 'Record (.mp4)':
-            exec += ['-r',home + '.mp4']
+            exec += ['-r',rec_path + '.mp4']
         case 'Record (.mkv)':
-            exec += ['-r',home + '.mkv']
+            exec += ['-r',rec_path + '.mkv']
     print(exec)
     window.withdraw()
     try:
@@ -56,3 +60,6 @@ def OtgRunner(hid,window):
         prog = subprocess.check_output(exec,shell=True,cwd='Runtime')
     except subprocess.CalledProcessError as progexc:
         messagebox.showerror('Program Gak iso jalan', 'Please check cable or turn on USB Debugging')
+
+def OpenFolder():
+    subprocess.Popen(['explorer.exe',home + '\\videos\\MirrorRec'])

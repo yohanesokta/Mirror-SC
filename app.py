@@ -3,7 +3,7 @@ from PIL import Image
 import subprocess
 import psutil
 from user_data import *
-from runner import mainRun,OtgRunner
+from runner import mainRun,OtgRunner,OpenFolder
 
 # INTIALIANZING  
 window = customtkinter.CTk()
@@ -159,7 +159,8 @@ OPL = customtkinter.CTkButton(
     text_color='white',
     image=OPL_image,
     corner_radius=5,
-    hover_color='#E67E22'
+    hover_color='#E67E22',
+    command=OpenFolder
 ).place(x=330,y=8)
 
 frame2 = customtkinter.CTkFrame(
