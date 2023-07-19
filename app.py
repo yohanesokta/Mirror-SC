@@ -118,6 +118,29 @@ def otgConnect():
         command=otgMK
     )
     mouse_keyboard.place(x=150,y=5)
+
+def AdvanceSetting():
+    adv = customtkinter.CTkToplevel()
+    lebar = 290
+    tinggi = 360
+    Width = window.winfo_screenwidth()
+    Height = window.winfo_screenheight()
+    pos_x = int((Width/2) - (lebar/2))
+    pos_y = int((Height/2) - (tinggi/2) - 50)
+    adv.geometry(f"{lebar}x{tinggi}+{pos_x}+{pos_y}")
+    adv.resizable(0,0)
+    adv.title('Advanced Setings')
+    adv.focus_force()
+    adv.lift()
+    adv.grab_set()
+
+    Btn_bitrate = customtkinter.CTkSlider(
+        master=adv,
+        height=15,
+        width=280
+    )
+    Btn_bitrate.place(x=5,y=5)
+
 # --------------------------------------
 # End TOP LEVE:
 # --------------------------------------
@@ -177,23 +200,23 @@ mirror_icon = customtkinter.CTkImage(light_image=Image.open('./asset/mirror.png'
 btn_mirror = customtkinter.CTkButton(
     master=frame2,                                                                                                                                              
     width=220,
-    height=80,
+    height=90,
     bg_color='#EBEBEB',
     text='Screen Miror',
     image=mirror_icon,
     command=mirror_start
-).place(x=10,y=72.5)
+).place(x=10,y=60)
 
 # Device Mirror
 otg_icon = customtkinter.CTkImage(light_image=Image.open('./asset/key.png'),size=(25,23))
 btn_otg = customtkinter.CTkButton(
     master=frame2,
     width=220,
-    height=80,
+    height=97.5,
     text='Device Miror',
     image=otg_icon,
     command=otgConnect
-).place(x=10,y=167.5)
+).place(x=10,y=157.5)
 
 color_frame2 = "#A8CDEA"
 right_frame2 = customtkinter.CTkFrame(
@@ -300,6 +323,17 @@ record_conf = customtkinter.CTkOptionMenu(
 )
 record_conf.place(x=330,y=170)
 
+Adv_image = customtkinter.CTkImage(light_image=Image.open('./asset/setting.png'),size=(20,20))
+advance_button = customtkinter.CTkButton(
+    master=right_frame2,
+    width=32,
+    height=32,
+    text='',
+    bg_color='#EAEAEA',
+    image=Adv_image,
+    command=AdvanceSetting
+)
+advance_button.place(x=(480/2)-16,y=10)
 cmd = customtkinter.CTkTextbox(
     master=window,
     width=460,
