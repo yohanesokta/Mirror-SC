@@ -3,6 +3,7 @@ from PIL import Image
 import subprocess
 import psutil
 from user_data import *
+import os
 from runner import mainRun,OtgRunner,OpenFolder
 
 # INTIALIANZING  
@@ -134,13 +135,33 @@ def AdvanceSetting():
     adv.lift()
     adv.grab_set()
 
-    Btn_bitrate = customtkinter.CTkSlider(
+    v_bitrate = 0
+
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Video Bitrate',
+    ).place(x=15,y=5)
+
+    def v_bitrate_change(Val):
+        value_v_bitrate.configure(text=str(int(Val/1000)) + ' Kb/s')
+
+
+    btn_slide_vid_bitrate = customtkinter.CTkSlider(
+        # default 8000000
         master=adv,
         height=15,
-        width=280
+        width=280,
+        from_=0,
+        command=v_bitrate_change,
+        to=8000000,
     )
-    Btn_bitrate.place(x=5,y=5)
+    btn_slide_vid_bitrate.place(x=5,y=35)
 
+    value_v_bitrate = customtkinter.CTkLabel(
+        master=adv,
+        text=str(int(btn_slide_vid_bitrate.get()/1000)) + ' Kb/s',
+    )
+    value_v_bitrate.place(x=290-70,y=5)
 # --------------------------------------
 # End TOP LEVE:
 # --------------------------------------
