@@ -135,12 +135,55 @@ def AdvanceSetting():
     adv.lift()
     adv.grab_set()
 
-    v_bitrate = 0
+    customtkinter.CTkLabel(
+        master=adv,
+        text="Codec",
+        width=290,
+        fg_color='#0078D4',
+        text_color='white'
+    ).place(x=0,y=0)
 
     customtkinter.CTkLabel(
         master=adv,
+        text='Video'
+    ).place(x=15,y=30)
+
+    v_codec = customtkinter.CTkOptionMenu(
+        master=adv,
+        values=[
+            'h264',
+            'h265',
+            'av1'
+        ],
+        width=45,
+        height=20
+    )
+    v_codec.place(x=55,y=33)
+
+
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Audio'
+    ).place(x=lebar-110,y=30)
+
+    a_codec = customtkinter.CTkOptionMenu(
+        master=adv,
+        values=[
+            'opus',
+            'aac',
+            'raw'
+        ],
+        width=45,
+        height=20
+    )
+    a_codec.place(x=lebar-70,y=33)
+
+
+    v_bitrate = 0
+    customtkinter.CTkLabel(
+        master=adv,
         text='Video Bitrate',
-    ).place(x=15,y=5)
+    ).place(x=15,y=65)
 
     def v_bitrate_change(Val):
         value_v_bitrate.configure(text=str(int(Val/1000)) + ' Kb/s')
@@ -155,13 +198,13 @@ def AdvanceSetting():
         command=v_bitrate_change,
         to=8000000,
     )
-    btn_slide_vid_bitrate.place(x=5,y=35)
+    btn_slide_vid_bitrate.place(x=5,y=95)
 
     value_v_bitrate = customtkinter.CTkLabel(
         master=adv,
         text=str(int(btn_slide_vid_bitrate.get()/1000)) + ' Kb/s',
     )
-    value_v_bitrate.place(x=290-70,y=5)
+    value_v_bitrate.place(x=290-70,y=65)
 # --------------------------------------
 # End TOP LEVE:
 # --------------------------------------
