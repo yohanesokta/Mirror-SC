@@ -4,8 +4,8 @@ from pathlib import Path
 import time
 import os
 home = str(Path.home())
-os.system('mkdir '+ home + '\\videos\\MirrorRec\\')
-rec_path = home + '\\videos\\MirrorRec\\MirrorRec_' + str(time.time())
+if not os.path.isdir(home + '\\Videos\\MirrorRec'):
+    os.system('mkdir '+ home + '\\videos\\MirrorRec\\')
 
 
 def mainRun(args,window):
