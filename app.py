@@ -142,8 +142,16 @@ def AdvanceSetting():
     adv.focus_force()
     adv.lift()
     adv.grab_set()
+    def top_destroy(args=True):
+        if args:
+            load_data()
+        adv.destroy()
+        adv.update()
+
+
     def adv_save():
         save_data(config)
+        top_destroy(False)
 
     def no_control():
         if Btn_no_control.get():
@@ -288,8 +296,8 @@ def AdvanceSetting():
         width=280,
         from_=0,
         command=v_buffer_change,
-        to=200,
-    )
+        to=118,
+    )    
     btn_slide_v_buffer.place(x=5,y=100+pad_buttom)
 
     value_v_buffer = customtkinter.CTkLabel(
@@ -372,10 +380,6 @@ def AdvanceSetting():
         command=adv_save
     )
     Btn_Adv_Save.place(x=25,y=350)
-
-    def top_destroy():
-        adv.destroy()
-        adv.update()
 
     Btn_Adv_Close = customtkinter.CTkButton(
         master=adv,
@@ -648,6 +652,7 @@ if process_status:
 
 
 # Sync Aplikasi dengan save data config
+
 syncConfig(btn_full,'fullscreen','box')
 syncConfig(btn_audio,'audio','box')
 syncConfig(btn_on,'keepOn','box')
