@@ -5,7 +5,7 @@
 
 # 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yohanesokta/Mirror-SC/master/Capture.PNG"/>
+  <img src="https://raw.githubusercontent.com/yohanesokta/MD-asset/main/Capture.PNG"/>
 </p>
 
 Aplikasi ini dapat digunakan secara ( Open Source ) serta dengan penggunaan dan setting yang mudah dipahami untuk screen mirroring serta kebutuhan lainya
@@ -15,7 +15,20 @@ Aplikasi ini dapat digunakan secara ( Open Source ) serta dengan penggunaan dan 
 [Download](https://github.com/yohanesokta/Mirror-SC/releases)
 
 Bisa pergi ke tab release dan download versi terbaru aplikasi ini
+ 
+ note* hapus dulu aplikasi versi pertama jika pernah menginstall
+ 
+## Apa yang baru ?
 
+  - Menggunakan SCRCPY versi #v2.1
+  - Advance Setting ( untuk settingan lebih mendalam dan profesional )
+  - settingan no control dan no bitrate (default pada 
+  versi 1.1)
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/yohanesokta/MD-asset/main/2Capture.PNG"/>
+</p>
+  
 ## Cara Build
 
 Kalian bisa build project ini atau sekedar merunning project menggunakan python
