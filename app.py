@@ -3,6 +3,7 @@ from PIL import Image
 import subprocess
 import psutil
 from user_data import *
+import os
 from runner import mainRun,OtgRunner,OpenFolder
 
 # INTIALIANZING  
@@ -73,6 +74,12 @@ def option(btn,name):
     print('update')
     cmdUpdate("setting updated { "+ str(btn.get()) + " }\n")
 
+def option_v(btn,name):
+    config.set('User',name,str(int(btn)))
+    print('update')
+    cmdUpdate("setting updated { "+ str(int(btn)) + " }\n")
+
+
 def otgM():
     OtgRunner('mouse',window)
 def otgMK():
@@ -94,6 +101,7 @@ def otgConnect():
     top.focus_force()
     top.lift()
     top.grab_set()
+
 
     mouse = customtkinter.CTkButton(
         master=top,
@@ -118,6 +126,295 @@ def otgConnect():
         command=otgMK
     )
     mouse_keyboard.place(x=150,y=5)
+
+def AdvanceSetting():
+    adv = customtkinter.CTkToplevel()
+    adv_global_color = '#006CA3'
+    lebar = 290
+    tinggi = 400
+    Width = window.winfo_screenwidth()
+    Height = window.winfo_screenheight()
+    pos_x = int((Width/2) - (lebar/2))
+    pos_y = int((Height/2) - (tinggi/2) - 50)
+    adv.geometry(f"{lebar}x{tinggi}+{pos_x}+{pos_y}")
+    adv.resizable(0,0)
+    adv.title('Advanced Setings')
+    adv.focus_force()
+    adv.lift()
+    adv.grab_set()
+    def top_destroy(args=True):
+        if args:
+            load_data()
+        adv.destroy()
+        adv.update()
+
+
+    def adv_save():
+        save_data(config)
+        top_destroy(False)
+
+    def no_control():
+        if Btn_no_control.get():
+            config.set('User','no_control','True')
+        else:
+            config.set('User','no_control','False')
+
+    def no_buffer():
+        if Btn_no_buffer.get():
+            config.set('User','no_buffer','True')
+        else:
+            config.set('User','no_buffer','False')
+
+    # Set Wiget ---------------------
+
+    customtkinter.CTkLabel(
+        master=adv,
+        text="Codec",
+        width=290,
+        fg_color=adv_global_color,
+        text_color='white'
+    ).place(x=0,y=0)
+
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Video'
+    ).place(x=15,y=35)
+
+    v_codec = customtkinter.CTkOptionMenu(
+        master=adv,
+        values=[
+            'h264',
+            'h265',
+            'av1'
+        ],
+        width=45,
+        height=20,
+        command=lambda event:option(v_codec,'video_codec')
+    )
+    v_codec.place(x=55,y=38)
+
+    # Video Bitrate
+
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Audio'
+    ).place(x=lebar-110,y=35)
+
+    a_codec = customtkinter.CTkOptionMenu(
+        master=adv,
+        values=[
+            'opus',
+            'aac',
+            'raw'
+        ],
+        width=45,
+        height=20,
+        command=lambda event:option(a_codec,'audio_codec')
+    )
+    a_codec.place(x=lebar-70,y=38)
+
+
+    v_bitrate = 0
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Video Bitrate',
+    ).place(x=15,y=70)
+
+    def v_bitrate_change(Val):
+        value_v_bitrate.configure(text=str(int(Val/1000)) + ' Kb/s')
+        option_v(Val,'v_bitrate')
+
+
+    btn_slide_vid_bitrate = customtkinter.CTkSlider(
+        # default 8000000
+        master=adv,
+        height=15,
+        width=280,
+        from_=100000,
+        command=v_bitrate_change,
+        to=8000000,
+    )
+    btn_slide_vid_bitrate.place(x=5,y=100)
+
+
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Audio'
+    ).place(x=lebar-110,y=35)
+
+    #Audio Bitrate
+
+    a_bitrate = 0
+    pad_buttom = 50
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Audio Bitrate',
+    ).place(x=15,y=70+pad_buttom)
+
+    def a_bitrate_change(Val):
+        value_a_bitrate.configure(text=str(int(Val/1000)) + ' Kb/s')
+        option_v(Val,'a_bitrate')
+
+
+    btn_slide_a_bitrate = customtkinter.CTkSlider(
+        # default 8000000
+        master=adv,
+        height=15,
+        width=280,
+        from_=64000,
+        command=a_bitrate_change,
+        to=512000,
+    )
+    btn_slide_a_bitrate.place(x=5,y=100+pad_buttom)
+  
+    value_a_bitrate = customtkinter.CTkLabel(
+        master=adv,
+        text=str(int(btn_slide_a_bitrate.get()/1000)) + ' Kb/s',
+    )
+    value_a_bitrate.place(x=290-70,y=70+pad_buttom)
+    
+
+    # Video placing
+
+    # Video Buffer
+
+    v_buffer = 0
+    pad_buttom+=70
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Video Buffer',
+    ).place(x=15,y=70+pad_buttom)
+
+    def v_buffer_change(Val):
+        value_v_buffer.configure(text=str(int(Val)) + ' Kb/s')
+        option_v(Val,'v_buffer')
+
+    btn_slide_v_buffer = customtkinter.CTkSlider(
+        # default 8000000
+        master=adv,
+        height=15,
+        width=280,
+        from_=0,
+        command=v_buffer_change,
+        to=118,
+    )    
+    btn_slide_v_buffer.place(x=5,y=100+pad_buttom)
+
+    value_v_buffer = customtkinter.CTkLabel(
+        master=adv,
+        text=str(int(btn_slide_v_buffer.get())) + ' Kb/s',
+    )
+    value_v_buffer.place(x=290-70,y=70+pad_buttom)
+
+    # Audio Buffer
+
+    customtkinter.CTkFrame(
+        master=adv,
+        width=lebar,
+        height=1,
+        fg_color='black'
+    ).place(x=0,y=120)
+
+    # Video Buffer
+
+    pad_buttom+=50
+    customtkinter.CTkLabel(
+        master=adv,
+        text='Audio Buffer',
+    ).place(x=15,y=70+pad_buttom)
+
+    def a_buffer_change(Val):
+        value_a_buffer.configure(text=str(int(Val)) + ' Kb/s')
+        option_v(Val,'a_buffer')
+
+    btn_slide_a_buffer = customtkinter.CTkSlider(
+        # default 8000000
+        master=adv,
+        height=15,
+        width=280,
+        from_=40,
+        command=a_buffer_change,
+        to=100,
+    )
+    btn_slide_a_buffer.place(x=5,y=100+pad_buttom)
+
+    value_a_buffer = customtkinter.CTkLabel(
+        master=adv,
+        text=str(int(btn_slide_a_buffer.get())) + ' Kb/s',
+    )
+    value_a_buffer.place(x=290-70,y=70+pad_buttom)
+
+
+# No Buffer
+
+    Btn_no_buffer = customtkinter.CTkCheckBox(
+        master=adv,
+        text='No Buffer',
+        checkbox_height=14,
+        checkbox_width=14,
+        border_width=1.5,
+        corner_radius=50,
+        command=no_buffer
+    )
+    Btn_no_buffer.place(x=15,y=310)
+
+
+# No Control
+    
+
+    Btn_no_control = customtkinter.CTkCheckBox(
+        master=adv,
+        text='No Control',
+        checkbox_height=14,
+        checkbox_width=14,
+        border_width=1.5,
+        corner_radius=50,
+        command=no_control
+    )
+    Btn_no_control.place(x=lebar-90,y=310)
+
+    Btn_Adv_Save = customtkinter.CTkButton(
+        master=adv,
+        text='Save',
+        width=100,
+        command=adv_save
+    )
+    Btn_Adv_Save.place(x=25,y=350)
+
+    Btn_Adv_Close = customtkinter.CTkButton(
+        master=adv,
+        text='Discard',
+        width=100,
+        fg_color='#FD6262',
+        command=top_destroy
+    )
+    Btn_Adv_Close.place(x=lebar-125,y=350)
+
+
+
+    # Set SyncConfig
+
+    syncConfig(v_codec,'video_codec','Option')
+    syncConfig(a_codec,'audio_codec','Option')
+    syncConfig(btn_slide_vid_bitrate,'v_bitrate','int_Option')
+    syncConfig(btn_slide_a_bitrate,'a_bitrate','int_Option')
+    syncConfig(btn_slide_v_buffer,'v_buffer','int_Option')
+    syncConfig(btn_slide_a_buffer,'a_buffer','int_Option')
+    syncConfig(Btn_no_control,'no_control','box')
+    syncConfig(Btn_no_buffer,'no_buffer','box')
+
+    value_v_bitrate = customtkinter.CTkLabel(
+        master=adv,
+        text=str(int(btn_slide_vid_bitrate.get()/1000)) + ' Kb/s',
+    )
+    value_v_bitrate.place(x=290-70,y=70)
+
+    value_a_bitrate.configure(text=str(int(btn_slide_a_bitrate.get()/1000)) + ' Kb/s')
+    value_v_buffer.configure(text=str(int(btn_slide_v_buffer.get())) + ' Kb/s')
+    value_a_buffer.configure(text=str(int(btn_slide_a_buffer.get())) + ' Kb/s')
+
+   
+
 # --------------------------------------
 # End TOP LEVE:
 # --------------------------------------
@@ -177,23 +474,23 @@ mirror_icon = customtkinter.CTkImage(light_image=Image.open('./asset/mirror.png'
 btn_mirror = customtkinter.CTkButton(
     master=frame2,                                                                                                                                              
     width=220,
-    height=80,
+    height=90,
     bg_color='#EBEBEB',
     text='Screen Miror',
     image=mirror_icon,
     command=mirror_start
-).place(x=10,y=72.5)
+).place(x=10,y=60)
 
 # Device Mirror
 otg_icon = customtkinter.CTkImage(light_image=Image.open('./asset/key.png'),size=(25,23))
 btn_otg = customtkinter.CTkButton(
     master=frame2,
     width=220,
-    height=80,
+    height=97.5,
     text='Device Miror',
     image=otg_icon,
     command=otgConnect
-).place(x=10,y=167.5)
+).place(x=10,y=157.5)
 
 color_frame2 = "#A8CDEA"
 right_frame2 = customtkinter.CTkFrame(
@@ -300,6 +597,17 @@ record_conf = customtkinter.CTkOptionMenu(
 )
 record_conf.place(x=330,y=170)
 
+Adv_image = customtkinter.CTkImage(light_image=Image.open('./asset/setting.png'),size=(20,20))
+advance_button = customtkinter.CTkButton(
+    master=right_frame2,
+    width=32,
+    height=32,
+    text='',
+    bg_color='#EAEAEA',
+    image=Adv_image,
+    command=AdvanceSetting
+)
+advance_button.place(x=(480/2)-16,y=10)
 cmd = customtkinter.CTkTextbox(
     master=window,
     width=460,
@@ -342,7 +650,9 @@ if process_status:
             hover_color='#FF9200'
             )
 
+
 # Sync Aplikasi dengan save data config
+
 syncConfig(btn_full,'fullscreen','box')
 syncConfig(btn_audio,'audio','box')
 syncConfig(btn_on,'keepOn','box')
