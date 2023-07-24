@@ -19,7 +19,19 @@ def mainRun(args,window):
         exec += ['--no-audio']
     if args.get(lib,'keepOn') == 'True':
         exec += ['-w']
-    
+    if args.get(lib,'no_buffer') == 'False':
+        exec += ['--display-buffer=' + str(args.get(lib,'v_buffer'))]
+        exec += ['--audio-buffer=' + str(args.get(lib,'a_buffer'))]
+
+    if args.get(lib,'no_control') == 'True':
+        exec += ['--no-control']
+
+    exec += ['--video-bit-rate=' + str(int(args.get(lib,'v_bitrate')))]
+    if not args.get(lib,'audio_codec') == 'raw':
+        exec += ['--audio-bit-rate=' + str(int(args.get(lib,'a_bitrate')))]
+    exec += ['--audio-codec=' + str(args.get(lib,'audio_codec'))]
+    exec += ['--video-codec=' + str(args.get(lib,'video_codec'))]
+
     match args.get(lib,'res'):
         case '480p':
             exec += ['--max-size=480']
@@ -45,10 +57,9 @@ def mainRun(args,window):
     window.withdraw()
     try:
         grepOut = subprocess.check_output(exec, shell=True,cwd='Runtime')                       
-    except subprocess.CalledProcessError as grepexc:                                                                                                   
+    except subprocess.CalledProcessError as grepexc:                                                                                                  
         messagebox.showerror('Program Gak iso jalan', 'Please check cable or turn on USB Debugging')
     window.deiconify()
-
 
 # function otg
 
