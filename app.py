@@ -1,5 +1,6 @@
 import customtkinter
 from PIL import Image
+from tkinter import messagebox
 import subprocess
 import psutil
 from user_data import *
@@ -55,6 +56,7 @@ def audio_com():
         config.set('User','audio','True')
     else:
         config.set('User','audio','False')
+
 
 def keepOn_com():
     global config
@@ -156,6 +158,10 @@ def AdvanceSetting():
     def no_control():
         if Btn_no_control.get():
             config.set('User','no_control','True')
+            if config.get('User','keepon') == 'True':
+                messagebox.showwarning('Infone Massehh', 'Mode Keep On Nyala, Fungsi ini tidak dapat bekerja')
+                config.set('User','no_control','False')
+                Btn_no_control.deselect()
         else:
             config.set('User','no_control','False')
 
@@ -360,7 +366,6 @@ def AdvanceSetting():
 
 
 # No Control
-    
 
     Btn_no_control = customtkinter.CTkCheckBox(
         master=adv,
@@ -371,6 +376,7 @@ def AdvanceSetting():
         corner_radius=50,
         command=no_control
     )
+
     Btn_no_control.place(x=lebar-90,y=310)
 
     Btn_Adv_Save = customtkinter.CTkButton(
