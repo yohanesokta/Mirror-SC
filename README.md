@@ -35,7 +35,7 @@ Kalian bisa build project ini atau sekedar merunning project menggunakan python
 
 ### install package python (wajib)
 
-	pip install customtkinter psutil PIL configpraser
+	pip install -r requirements.txt
 
 ### Cara running project
 - pastikan sudah menginstall python
