@@ -22,9 +22,9 @@ def mainRun(args,window):
     if args.get(lib,'no_buffer') == 'False':
         exec += ['--display-buffer=' + str(args.get(lib,'v_buffer'))]
         exec += ['--audio-buffer=' + str(args.get(lib,'a_buffer'))]
-
-    if args.get(lib,'no_control') == 'True':
-        exec += ['--no-control']
+    if not args.get(lib,'keepon') == 'True':
+        if args.get(lib,'no_control') == 'True':
+            exec += ['--no-control']
 
     exec += ['--video-bit-rate=' + str(int(args.get(lib,'v_bitrate')))]
     if not args.get(lib,'audio_codec') == 'raw':
