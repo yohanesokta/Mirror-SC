@@ -1,8 +1,10 @@
 import configparser
+from pathlib import Path
+path = str(Path.home()) + '//Documents//YhanzC Product//'
 CFpraser = configparser.ConfigParser()
 
 def load_data():
-    CFpraser.read('user_config.cfg')
+    CFpraser.read(path + str('user_config.cfg'))
     return CFpraser
 
 def syncConfig(Var,Config,input):
@@ -22,4 +24,4 @@ def syncConfig(Var,Config,input):
 
 
 def save_data(cfg):
-    with open('user_config.cfg', 'w') as configfile:cfg.write(configfile)
+    with open(path + str('user_config.cfg'), 'w') as configfile:cfg.write(configfile)
