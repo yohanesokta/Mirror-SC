@@ -5,7 +5,7 @@ import subprocess
 import psutil
 from user_data import *
 import os
-from runner import mainRun,OtgRunner,OpenFolder
+from runner import *
 
 # INTIALIANZING  
 window = customtkinter.CTk()

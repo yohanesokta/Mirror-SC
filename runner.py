@@ -10,7 +10,7 @@ if not os.path.isdir(home + '\\Videos\\MirrorRec'):
 
 def mainRun(args,window):
     global home
-    rec_path = home + '\\videos\\MirrorRec\\MirrorRec_' + str(time.time())
+    rec_path = home + str('\\videos\\MirrorRec\\MirrorRec_') + str(time.time())
     lib = 'User'
     exec = ['scrcpy.exe']
     if args.get(lib,'fullscreen') == 'True':
@@ -53,7 +53,7 @@ def mainRun(args,window):
             exec += ['-r',rec_path + '.mp4']
         case 'Record (.mkv)':
             exec += ['-r',rec_path + '.mkv']
-    print(exec)
+
     window.withdraw()
     try:
         grepOut = subprocess.check_output(exec, shell=True,cwd='Runtime')                       

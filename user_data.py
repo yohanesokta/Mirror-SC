@@ -1,6 +1,6 @@
 import configparser
 from pathlib import Path
-path = str(Path.home()) + '//Documents//YhanzC Product//'
+path = str(Path.home()) + '\\Documents\\YhanzC Product\\'
 CFpraser = configparser.ConfigParser()
 
 def load_data():
